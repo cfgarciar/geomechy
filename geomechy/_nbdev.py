@@ -2,11 +2,13 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"ElementObject": "00_core.ipynb"}
+index = {"ElementObject": "00_core.ipynb",
+         "flux": "01_physics.ipynb"}
 
-modules = ["core.py"]
+modules = ["core.py",
+           "physics.py"]
 
-doc_url = "https://cfgarciar.github.io/geomechy/"
+doc_url = "https://cfgarciar.github.io/"
 
 git_url = "https://github.com/cfgarciar/geomechy/tree/master/"
 
