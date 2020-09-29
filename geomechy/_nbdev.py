@@ -3,7 +3,7 @@
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"ElementObject": "00_core.ipynb",
-         "flux": "01_physics.ipynb"}
+         "Flux": "01_physics.ipynb"}
 
 modules = ["core.py",
            "physics.py"]
