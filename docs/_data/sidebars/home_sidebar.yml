@@ -10,7 +10,10 @@ entries:
       title: Overview
       url: /
     - output: web,pdf
-      title: Title
+      title: Core
+      url: core.html
+    - output: web,pdf
+      title: Physics
       url: physics.html
     output: web
     title: geomechy

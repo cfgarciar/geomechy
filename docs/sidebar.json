@@ -1,6 +1,7 @@
 {
   "geomechy": {
     "Overview": "/",
-    "Title": "physics.html"
+    "Core": "core.html",
+    "Physics": "physics.html"
   }
 }
