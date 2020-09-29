@@ -1,4 +1,4 @@
 __version__ = "1.0.1"
 
-from .core import *
-from .physics import *
+from geomechy.core import *
+from geomechy.physics import *
