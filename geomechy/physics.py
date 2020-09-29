@@ -4,4 +4,4 @@ __all__ = ['Flux']
 
 # Cell
 class Flux:
-    pass
+    print("ok")
