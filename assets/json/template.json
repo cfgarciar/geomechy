@@ -1,0 +1,25 @@
+{
+    "Nodes":[],
+    "Elements":[],
+    "elementType":"Line3",
+    "Materials":{
+        "Fluids":[],
+        "PorousMedia":[],
+        "Temp":[]
+    },
+    "Physics":"Hydro",
+    "Constitutive":"PlainStrain",
+    "FEM":{
+        "BC":[],
+        "Loads":[],
+        "Fields":[],
+        "IC":[]
+    },
+    "Steps":{},
+    "Solver":{
+        "time":"FordwardEuler",
+        "constitutive":"MNR",
+        "linearSystem":"GradDesc"
+    },
+    "Modules":[]
+}
