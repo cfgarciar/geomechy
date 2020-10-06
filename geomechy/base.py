@@ -3,9 +3,6 @@
 __all__ = ['Properties', 'BaseMaterial', 'BaseElement', 'ItemDict']
 
 # Cell
-from .core import MaterialManager
-
-# Cell
 class Properties:
 
     def __init__ (self, props={}):
@@ -116,7 +113,7 @@ class BaseElement(list):
 # Cell
 class ItemDict(dict):
 
-    def add (self, Id, item):
+    def add(self, Id, item):
         self[Id] = item
 
     def get(self, Ids):

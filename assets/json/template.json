@@ -13,13 +13,14 @@
         "BC":[],
         "Loads":[],
         "Fields":[],
-        "IC":[]
+        "IC":[],
+        "Steps":[]
     },
-    "Steps":{},
     "Solver":{
         "time":"FordwardEuler",
         "constitutive":"MNR",
         "linearSystem":"GradDesc"
     },
-    "Modules":[]
+    "Modules":[],
+    "Writers":[]
 }
