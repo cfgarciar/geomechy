@@ -1,3 +1,114 @@
 {
-    "data":"None"
+    "Nodes": {
+        "dim": "ft",
+        "coords": [
+            [1, 0, 12]
+        ]
+    },
+    "Elements": [
+        [1, 1, 2, 3, 4],
+        [2, 3, 4, 5, 6]
+    ],
+    "elementType": "Quad4",
+    "Materials": {
+        "Fluids": [{
+            "name": "water",
+            "density": {
+                "dim": "kg/m3",
+                "value": 1000
+            },
+            "dynamic viscosity": {
+                "dim": "cP",
+                "value": 1000
+            },
+            "Bulk Modulus": {
+                "dim": "Pa",
+                "value": 100000
+            }
+        }],
+        "PorousMedia": {
+            "name": "soil",
+            "density": {
+                "dim": "kg/m3",
+                "value": 1000
+            },
+            "porosity": {
+                "dim": "Adim",
+                "value": 0.3
+            },
+            "permeability": {
+                "dim": "mD",
+                "value": 0.0001
+            },
+            "Poisson": {
+                "dim": "Adim",
+                "value": 0.2
+            },
+            "Young": {
+                "dim": "Pa",
+                "value": 300000
+            },
+            "Bulk modulus": {
+                "dim": "Pa",
+                "value": 750000
+            }
+        },
+        "Temp": [{
+                "name": "water",
+                "specific heat capacity": {
+                    "dim": "J/kg/K",
+                    "value": 1
+                }
+            },
+            {
+                "name": "soil",
+                "specific heat capacity": {
+                    "dim": "J/kg/K",
+                    "value": 1
+                },
+                "thermal conductivity": {
+                    "dim": "J/s/m/K",
+                    "value": 1
+                }
+            }
+        ]
+    },
+    "Physics": "Hydro",
+    "Constitutive": "PlainStrain",
+    "FEM": {
+        "BC": {
+            "u": {},
+            "v": {},
+            "w": {},
+            "p": {},
+            "q": {}
+        },
+        "Loads": {
+            "tx": {},
+            "ty": {},
+            "tz": {},
+            "bx": {},
+            "by": {},
+            "bz": {},
+            "q": {}
+        },
+        "Fields": [],
+        "IC": {
+            "p": {},
+            "s": {}
+        },
+        "Steps": {
+            "Step1": {
+                "name": "geostatic",
+                "values": {}
+            }
+        }
+    },
+    "Solver": {
+        "time": "FordwardEuler",
+        "constitutive": "MNR",
+        "linearSystem": "GradDesc"
+    },
+    "Modules": [],
+    "Writers": []
 }

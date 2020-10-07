@@ -1,26 +1,121 @@
 {
-    "Nodes":[],
-    "Elements":[],
-    "elementType":"Line3",
-    "Materials":{
-        "Fluids":[],
-        "PorousMedia":[],
-        "Temp":[]
+    "Nodes": {
+        "dim": "ft",
+        "coords": [
+            [1, 0, 12],
+            [2, 0, 0],
+            [3, 10, 1],
+            [4, 10, 12],
+            [5, 20, 2],
+            [6, 20, 12]
+        ]
     },
-    "Physics":"Hydro",
-    "Constitutive":"PlainStrain",
-    "FEM":{
-        "BC":[],
-        "Loads":[],
-        "Fields":[],
-        "IC":[],
-        "Steps":[]
+    "Elements": {
+        "elementType": "Quad4",
+        "elems": [
+            [1, 1, 2, 3, 4],
+            [2, 3, 4, 5, 6]
+        ]
     },
-    "Solver":{
-        "time":"FordwardEuler",
-        "constitutive":"MNR",
-        "linearSystem":"GradDesc"
+    "Materials": {
+        "Fluids": [{
+            "Type": "Water",
+            "density": {
+                "dim": "kg/meter**3",
+                "value": 1000
+            },
+            "dynamic viscosity": {
+                "dim": "centiPoise",
+                "value": 1000
+            },
+            "Bulk Modulus": {
+                "dim": "Pascal",
+                "value": 100000
+            }
+        }],
+        "PorousMedia": [{
+            "Type": "Soil",
+            "density": {
+                "dim": "kg/meter**3",
+                "value": 1000
+            },
+            "porosity": {
+                "dim": "dimless",
+                "value": 0.3
+            },
+            "permeability": {
+                "dim": "milliDarcy",
+                "value": 0.0001
+            },
+            "Poisson": {
+                "dim": "dimless",
+                "value": 0.2
+            },
+            "Young": {
+                "dim": "Pascal",
+                "value": 300000
+            },
+            "Bulk modulus": {
+                "dim": "Pascal",
+                "value": 750000
+            }
+        }],
+        "Temp": [{
+                "Type": "Water",
+                "specific heat capacity": {
+                    "dim": "Joules/kg/Kelvin",
+                    "value": 1
+                }
+            },
+            {
+                "Type": "Soil",
+                "specific heat capacity": {
+                    "dim": "Joules/kg/Kelvin",
+                    "value": 1
+                },
+                "thermal conductivity": {
+                    "dim": "Joules/second/meter/Kelvin",
+                    "value": 1
+                }
+            }
+        ]
     },
-    "Modules":[],
-    "Writers":[]
+    "Physics": "Hydro",
+    "Constitutive": "PlainStrain",
+    "FEM": {
+        "BC": {
+            "u": {},
+            "v": {},
+            "w": {},
+            "p": {},
+            "q": {}
+        },
+        "Loads": {
+            "tx": {},
+            "ty": {},
+            "tz": {},
+            "bx": {},
+            "by": {},
+            "bz": {},
+            "q": {}
+        },
+        "Fields": [],
+        "IC": {
+            "p": {},
+            "s": {}
+        },
+        "Steps": {
+            "Step1": {
+                "name": "geostatic",
+                "values": {}
+            }
+        }
+    },
+    "Solver": {
+        "time": "FordwardEuler",
+        "constitutive": "MNR",
+        "linearSystem": "GradDesc"
+    },
+    "Modules": [],
+    "Writers": []
 }
