@@ -4,6 +4,7 @@ __all__ = ['NodeSet', 'ElementSet', 'MaterialSet', 'ShapeFunctionsManager', 'Con
 
 # Cell
 import numpy as np
+from scipy.sparse import coo_matrix
 from .base import ItemDict
 from .utils import *
 from .io import jsonReader
@@ -30,8 +31,17 @@ class ElementSet(ItemDict):
         elems_dict = data["Elements"]
         self.elementType = elems_dict["elementType"]
 
+        max_node = np.max([np.max(elem[1:]) for elem in elems_dict["elems"]])
+        num_node = len(elems_dict["elems"][0][1:])
+
+        sparse_col  = np.array(range(num_node))
+        sparse_data = np.ones(num_node)
+
         for elem in elems_dict["elems"]:
-            self.add(elem[0], elem[1:])
+            sparse_row = np.sort(np.array(elem[1:])-1, axis=None)
+            sparse_le  = coo_matrix((sparse_data, (sparse_row, sparse_col)), shape=(max_node, num_node))
+
+            self.add(elem[0], [elem[1:], sparse_le])
 
     def getElementNodes(self, elemId):
         return self.get(elemId)

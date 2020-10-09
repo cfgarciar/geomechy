@@ -3,17 +3,16 @@
 __all__ = ['Elastic', 'PlaneStrain', 'PlaneStress', 'TransverseIsotropic']
 
 # Cell
-from .base import BaseMaterial, Properties
 import numpy as np
+from .base import BaseConstitutive, Properties
 
 # Cell
-class Elastic(BaseMaterial):
+class Elastic(BaseConstitutive):
 
     def __init__(self, props):
-        print(props)
 
         #Call the BaseMaterial constructor
-        BaseMaterial.__init__(self, props)
+        BaseConstitutive.__init__(self, props)
 
         #Create the hookean matrix
         fc1 = self.E/((1+self.nu)*(1-2*self.nu))
@@ -33,12 +32,12 @@ class Elastic(BaseMaterial):
         return self.De
 
 # Cell
-class PlaneStrain(BaseMaterial):
+class PlaneStrain(BaseConstitutive):
 
     def __init__(self, props):
 
         #Call the BaseMaterial constructor
-        BaseMaterial.__init__(self, props)
+        BaseConstitutive.__init__(self, props)
 
         #Create the hookean matrix
         fc1 = self.E/((1+self.nu)*(1-2*self.nu))
@@ -58,7 +57,7 @@ class PlaneStrain(BaseMaterial):
         return self.De
 
 # Cell
-class PlaneStress(BaseMaterial):
+class PlaneStress(BaseConstitutive):
 
     def __init__(self, props):
 
