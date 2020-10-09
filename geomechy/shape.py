@@ -2,7 +2,7 @@
 
 __all__ = ['getElemetType', 'tria_scheme', 'tetra_scheme', 'getGaussPoints', 'getShapeLine2', 'getShapeLine3',
            'getShapeTria3', 'getShapeTria6', 'getShapeQuad4', 'getShapeQuad8', 'getShapeQuad9', 'getShapeTetra4',
-           'getShapeTetra10', 'getShapeHexa8', 'getShapeHexa20']
+           'getShapeTetra10', 'getShapeHexa8', 'getShapeHexa20', 'getAllShapeFunctions']
 
 # Cell
 import numpy as np
@@ -685,5 +685,43 @@ def getShapeHexa20(gaussPoint):
 
     # Calculate derivatives of shape functions
     dN = np.vstack((dN_dxi, dN_deta, dN_ddseta))
+
+    return N, dN
+
+# Cell
+def getAllShapeFunctions(elemType, gaussPoint):
+
+    if "Line" in elemType:
+        if   "2" in elemType:
+            N, dN = getShapeLine2(gaussPoint)
+        elif "3" in elemType:
+            N, dN = getShapeLine3(gaussPoint)
+
+    elif "Tria" in elemType:
+        if   "3" in elemType:
+            N, dN = getShapeTria3(gaussPoint)
+        elif "6" in elemType:
+            N, dN = getShapeTria6(gaussPoint)
+
+    elif "Quad" in elemType:
+        if   "4" in elemType:
+            N, dN = getShapeQuad4(gaussPoint)
+        elif "8" in elemType:
+            N, dN = getShapeQuad8(gaussPoint)
+        elif "9" in elemType:
+            N, dN = getShapeQuad9(gaussPoint)
+
+
+    elif "Tetra" in elemType:
+        if   "4" in elemType:
+            N, dN = getShapeTetra4(gaussPoint)
+        elif "10" in elemType:
+            N, dN = getShapeTetra10(gaussPoint)
+
+    elif "Hexa" in elemType:
+        if   "8" in elemType:
+            N, dN = getShapeHexa8(gaussPoint)
+        elif "20" in elemType:
+            N, dN = getShapeHexa20(gaussPoint)
 
     return N, dN
