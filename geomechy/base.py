@@ -92,7 +92,8 @@ class BaseElement(list):
 class BaseMaterial:
 
     def __init__(self, props):
-        for name,val in props:
+        print(props)
+        for name,val in props.items():
             setattr(self, name, val)
 
         self.initHistory={}

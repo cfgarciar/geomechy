@@ -10,6 +10,7 @@ import numpy as np
 class Elastic(BaseMaterial):
 
     def __init__(self, props):
+        print(props)
 
         #Call the BaseMaterial constructor
         BaseMaterial.__init__(self, props)
