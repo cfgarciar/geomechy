@@ -10,6 +10,7 @@ from .utils import *
 from .io import jsonReader
 from .materials import *
 from .shape import *
+from .constitutive import *
 
 # Cell
 class NodeSet(ItemDict):
@@ -114,26 +115,30 @@ class ShapeFunctionsManager(ItemDict):
 # Cell
 class ConstitutiveManager(list):
 
-    def __init__(self, matProps):
-        matType = matProps.type
-        exec(f'from geomechy.materials import {matType} as material', globals())
-        self.mat = material(matProps)
-        self.iIter = -1
+    def __init__(self, constitutive):
 
-    def reset(self):
-        self.iIter = -1
+        for idx, c in enumerate(constitutive):
 
-    def getStress(self, kinematic, iSam=-1):
+            if c["Model"] == "Elastic":
+                elastic = Elastic(c["params"])
+                self.append(elastic)
 
-        if iSam == -1:
-            self.iIter += 1
-            iSam = self.iIter
+            elif c["Model"] == "PlaneStrain":
+                planeStrain = PlaneStrain(c["params"])
+                self.append(planeStrain)
 
-        self.mat.setIter(iSam)
-        return self.mat.getStress(kinematic)
+            elif c["Model"] == "PlaneStress":
+                planeStess = PlaneStess(c["params"])
+                self.append(planeStress)
 
-    def commitHistory(self):
-        self.mat.commitHistory()
+            elif c["Model"] == "TransverseIsotropic":
+                transverseIsotropic= TransverseIsotropic(c["params"])
+                self.append(transverseIsotropic)
+
+            elif c["Model"] == "MCC":
+                mcc= MCC(c["params"])
+                self.append(mcc)
+
 
 # Cell
 class ElementManager(ItemDict):

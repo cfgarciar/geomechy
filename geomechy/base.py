@@ -4,6 +4,8 @@ __all__ = ['ItemDict', 'Properties', 'BaseElement', 'BaseConstitutive']
 
 # Cell
 import pandas as pd
+from .utils import *
+from .io import jsonReader
 
 # Cell
 class ItemDict(dict):
@@ -96,10 +98,12 @@ class BaseConstitutive:
 
     def __init__(self, props):
         for name,val in props.items():
-            setattr(self, name, val)
+            dim = eval(val["dim"])
+            value = val["value"]
+            setattr(self, name, value*dim)
 
-        self.history = pd.DataFrame({"k":[0], "d_epsilon":[0]})
-        self.current = {"k":0, "d_epsilon":0}
+        self.history = pd.DataFrame({"i":[0], "d_epsilon":[0]})
+        self.current = {"i":0, "d_epsilon":0}
         self.iIter   = -1
 
     def setIter(self, iIter):

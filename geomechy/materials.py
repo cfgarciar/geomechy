@@ -5,6 +5,7 @@ __all__ = ['Soil', 'Rock', 'Water', 'Oil', 'Air', 'Gas', 'Soil']
 # Cell
 from .base import Properties
 from .utils import *
+from .io import jsonReader
 
 # Cell
 class Soil(Properties):
@@ -14,7 +15,7 @@ class Soil(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -30,7 +31,7 @@ class Rock(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -45,7 +46,7 @@ class Water(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -60,7 +61,7 @@ class Oil(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -75,7 +76,7 @@ class Air(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -90,7 +91,7 @@ class Gas(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])
@@ -105,7 +106,7 @@ class Soil(Properties):
             setattr(self, key, props[key])
 
         for att in dir(self):
-            if att.startswith('__') or att.startswith('store') or att.startswith('Type'):
+            if att.startswith('__') or att.startswith('store') or att.startswith('Type') or att.startswith('name'):
                 continue
 
             dim = eval(getattr(self,att)["dim"])

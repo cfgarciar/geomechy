@@ -20,6 +20,7 @@
     "Materials": {
         "Fluids": [{
             "Type": "Water",
+            "name": "Water",
             "density": {
                 "dim": "kg/meter**3",
                 "value": 1000
@@ -35,6 +36,7 @@
         }],
         "PorousMedia": [{
             "Type": "Soil",
+            "name": "Clay",
             "density": {
                 "dim": "kg/meter**3",
                 "value": 1000
@@ -62,6 +64,7 @@
         }],
         "Temp": [{
                 "Type": "Water",
+                "name": "Water",
                 "specific heat capacity": {
                     "dim": "Joules/kg/Kelvin",
                     "value": 1
@@ -69,6 +72,7 @@
             },
             {
                 "Type": "Soil",
+                "name": "Clay",
                 "specific heat capacity": {
                     "dim": "Joules/kg/Kelvin",
                     "value": 1
@@ -81,7 +85,21 @@
         ]
     },
     "Physics": "Hydro",
-    "Constitutive": "PlainStrain",
+    "Constitutive": [{
+        "Type": "Soil",
+        "name": "Clay",
+        "Model": "PlaneStrain",
+        "params": {
+            "E": {
+                "dim": "Pascal",
+                "value": 500
+            },
+            "nu": {
+                "dim": "dimless",
+                "value": 0.3
+            }
+        }
+    }],
     "FEM": {
         "BC": {
             "u": {},
