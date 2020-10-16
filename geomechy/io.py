@@ -14,7 +14,7 @@ def jsonReader(jsonFile):
             data = json.load(f)
 
         #  Dict keys check ---------------------------------------------
-        assert list(data.keys()) == ['Nodes', 'Elements', 'Materials', 'Physics',
+        assert list(data.keys()) == ['Nodes', 'Elements', 'Groups', 'Materials', 'Physics',
                                      'Constitutive', 'FEM', 'Solver', 'Modules', 'Writers']
 
         #  Nodes Check ------------------------------------------------

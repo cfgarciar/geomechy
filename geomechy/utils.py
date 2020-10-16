@@ -4,7 +4,13 @@ __all__ = ['pico', 'nano', 'micro', 'milli', 'centi', 'deci', 'kilo', 'mega', 'g
            'inch', 'kg', 'gram', 'pound', 'Ton', 'second', 'minute', 'hour', 'day', 'year', 'Kelvin', 'Rankine',
            'Celsius', 'Fahrenheit', 'litre', 'gallon', 'stb', 'Newton', 'dyne', 'lbf', 'Pascal', 'atm', 'bar', 'psi',
            'Joules', 'btu', 'Cal', 'centiPoise', 'Poise', 'centiStokes', 'Stokes', 'milliDarcy', 'Darcy', 'inch_second',
-           'mm_second', 'dimless']
+           'mm_second', 'dimless', 'lanczos', 'arnoldi']
+
+# Cell
+import numpy as np
+from scipy.sparse import coo_matrix
+import torch
+from scipy.io import loadmat
 
 # Cell
 pico  = 1.e-12
@@ -85,3 +91,85 @@ mm_second   = milli*meter*second  #millimeters per second -> meter per second
 
 # Cell
 dimless = 1.
+
+# Cell
+def lanczos(A,xo,m,reorthog=0):
+    p, n = A.shape
+    assert p == n
+    assert m <= n
+
+    device  = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    xo      = xo.type(torch.float64).to(device)
+    A       = A.type(torch.float64).to(device)
+    Q       = torch.zeros(n,m+1, dtype=torch.float64, device=device)
+    T       = torch.zeros(m+1,m, dtype=torch.float64, device=device)
+    alpha   = torch.zeros(m,1, dtype=torch.float64, device=device)
+    beta    = torch.zeros(m,1, dtype=torch.float64, device=device)
+    q       = xo/torch.norm(xo)
+    Q[:,0]  = q.reshape((-1))
+
+    for k in range(m):
+        w = torch.matmul(A,q)
+        alpha[k] = torch.matmul(q.T,w)
+
+        if k == 0:
+            w = w - alpha[0]*q
+        else:
+            w = w - alpha[k]*q - beta[k-1]*Q[:,k-1].reshape((-1,1))
+            #print(w)
+        if reorthog == 1:
+            for i in range(1,k):
+                h = torch.matmul(Q[:,i].reshape((-1,1)).type(torch.float64).T,w)
+                w = w - Q[:,i].reshape((-1,1))*h
+
+        beta[k] = torch.norm(w)
+
+        if beta[k]<1e-20:
+            return Q.cpu(), T.cpu()
+
+        q = w/beta[k]
+        Q[:,k+1] = q.reshape((-1))
+        #print(q)
+    T[:m,:] = torch.diag(beta[0:m-1].T[0],-1) + torch.diag(alpha.T[0]) + torch.diag(beta[0:m-1].T[0],1)
+    T[m,m-1] = beta[-1]
+
+    return Q.cpu(), T.cpu()
+
+# Cell
+def arnoldi(A,xo,m,reorthog=0):
+    p, n = A.shape
+    assert p == n
+    assert m <= n
+
+
+    device  = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    xo      = xo.type(torch.float64).to(device)
+    A       = A.type(torch.float64).to(device)
+    Q       = torch.zeros(n,m+1, dtype=torch.float64, device=device)
+    H       = torch.zeros(m+1,m, dtype=torch.float64, device=device)
+    tol     = n*2e-16;
+    q       = xo/torch.norm(xo)
+    Q[:,0]  = q.reshape((-1))
+
+    for k in range(m):
+        w  = A@Q[:,k]
+        ow = torch.norm(w)
+
+        for j in range(k+1):
+            H[j,k] = Q[:,j].T@w
+            w = w - H[j,k]*Q[:,j]
+
+        if reorthog == 1:
+            pass
+
+        H[k+1,k] = torch.norm(w)
+
+        if H[k+1,k] <= tol*ow:
+            m = k
+            H = H[:m+1,:m]
+            Q = Q[:n,:m+1]
+            return Q.cpu(), H.cpu(), m
+
+        Q[:,k+1] = w/H[k+1,k]
+
+    return Q.cpu(), H.cpu(), m

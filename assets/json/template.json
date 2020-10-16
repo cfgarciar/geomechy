@@ -17,6 +17,29 @@
             [2, 3, 4, 5, 6]
         ]
     },
+    "Groups":{
+        "NodeGroups":[
+            {
+                "BC1":{
+                    "name":"Boundary_14",
+                    "nodes":[1,4]
+                },
+                "BC2":{
+                    "name":"Boundary_65",
+                    "nodes":[6,5]
+                }
+            }
+        ],
+        "ElementGroups":[
+            {
+                "ALL":{
+                    "name":"All_Domain",
+                    "elements":[1,2],
+                    "materials":["Water", "Clay"]
+                }
+            }
+        ]
+    },
     "Materials": {
         "Fluids": [{
             "Type": "Water",
