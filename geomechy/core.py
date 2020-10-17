@@ -5,7 +5,9 @@ __all__ = ['NodeSet', 'ElementSet', 'GroupSet', 'MaterialSet', 'ShapeFunctionsMa
 
 # Cell
 import numpy as np
-from scipy.sparse import coo_matrix
+import scipy
+from scipy.sparse import csr_matrix
+
 from .base import ItemDict, BaseElement
 from .utils import *
 from .io import jsonReader
@@ -17,11 +19,12 @@ from .constitutive import *
 class NodeSet(ItemDict):
 
     def readFromDict(self, data):
-        nodes_dict = data["Nodes"]
-        self.node_dim = eval(nodes_dict["dim"])
+        nodes_dict    = data["Nodes"]
+        self.dimNodes = eval(nodes_dict["dim"])
+        self.numNodes = len(nodes_dict["coords"])
 
         for node in nodes_dict["coords"]:
-            self.add(node[0], np.array(node[1:])*self.node_dim)
+            self.add(node[0], np.array(node[1:])*self.dimNodes)
 
     def getNodeCoords(self, nodeId):
         return self.get(nodeId)
@@ -32,18 +35,19 @@ class ElementSet(ItemDict):
     def readFromDict(self, data):
         elems_dict = data["Elements"]
         self.elementType = elems_dict["elementType"]
+        self.numElements = len(elems_dict["elems"])
 
         max_node = np.max([np.max(elem[1:]) for elem in elems_dict["elems"]])
         num_node = len(elems_dict["elems"][0][1:])
 
-        sparse_col  = np.array(range(num_node))
+        sparse_row  = np.array(range(num_node))
         sparse_data = np.ones(num_node)
 
         for elem in elems_dict["elems"]:
-            sparse_row = np.sort(np.array(elem[1:])-1, axis=None)
-            sparse_le  = coo_matrix((sparse_data, (sparse_row, sparse_col)), shape=(max_node, num_node))
+            sparse_col = np.sort(np.array(elem[1:])-1, axis=None)
+            sparse_Le  = csr_matrix((sparse_data, (sparse_row, sparse_col)), shape=(num_node, max_node))
 
-            self.add(elem[0], [elem[1:], sparse_le])
+            self.add(elem[0], {"Nodes":elem[1:],"Le":sparse_Le})
 
     def getElementNodes(self, elemId):
         return self.get(elemId)
@@ -170,23 +174,31 @@ class ElementManager(ItemDict):
 
     def __init__(self, nodes, elems, groups, shapes, mats, constis):
         ItemDict.__init__(self)
-        self.nodes   = nodes
-        self.elems   = elems
-        self.groups  = groups
-        self.shapes  = shapes
-        self.mats    = mats
-        self.constis = constis
+        self.numNodes = nodes.numNodes
+        self.numElems = elems.numElements
+        self.nodes    = nodes
+        self.elems    = elems
+        self.groups   = groups
+        self.shapes   = shapes
+        self.mats     = mats
+        self.constis  = constis
 
-        for numElem, dataElem in elems.items():
-            el = self.elems.getData([numElem])
-            no = self.nodes.getData(el[numElem][0])
-            gr = self.groups["ElementGroups"][0]["ALL"]
-            sh = self.shapes.getShapeData(numElem)
-            ma = self.mats.getData(gr["materials"])
-            co = self.constis
+        for Id, dataElem in elems.items():
+            el = self.elems.getData([Id])
+            no = self.nodes.getData(el[Id]["Nodes"])
+            gr = self.groups["ElementGroups"]
+            sh = self.shapes.getShapeData(Id)
 
-            element = BaseElement(numElem, no, el, gr, sh, ma, co)
-            self.add(numElem, element)
+            for item in gr:
+                if Id in list(item.values())[0]["elements"]:
+                    ma = self.mats.getData(list(item.values())[0]["materials"])
+
+            for name,_ in self.constis.items():
+                if name in ma:
+                    co = self.constis[name]
+
+            element = BaseElement(Id, no, el, gr, sh, ma, co)
+            self.add(Id, element)
 
 
     def add(self, Id, item):

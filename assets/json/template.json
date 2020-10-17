@@ -18,18 +18,38 @@
         ]
     },
     "Groups":{
-        "NodeGroups":[
-            {
+        "NodeGroups":{
                 "BC1":{
                     "name":"Boundary_14",
-                    "nodes":[1,4]
+                    "type":"Dirichlet",
+                    "physics":"field",
+                    "nodes":[1,4],
+                    "p":{
+                        "dim": "Pascal",
+                        "value": 100
+                    }
                 },
                 "BC2":{
                     "name":"Boundary_65",
-                    "nodes":[6,5]
+                    "type":"Dirichlet",
+                    "physics":"field",
+                    "nodes":[6,5],
+                    "p":{
+                        "dim": "Pascal",
+                        "value": 0
+                    }
+                },
+                "BC3":{
+                    "name":"Boundary_23",
+                    "type":"Neumann",
+                    "physics":"field",
+                    "nodes":[2,3],
+                    "q":{
+                        "dim": "meter**3/second",
+                        "value": 0
+                    }
                 }
-            }
-        ],
+            },
         "ElementGroups":[
             {
                 "ALL":{
@@ -48,7 +68,7 @@
                 "dim": "kg/meter**3",
                 "value": 1000
             },
-            "dynamic viscosity": {
+            "dynamic_viscosity": {
                 "dim": "centiPoise",
                 "value": 1000
             },
@@ -70,7 +90,7 @@
             },
             "permeability": {
                 "dim": "milliDarcy",
-                "value": 0.0001
+                "value": 10
             },
             "Poisson": {
                 "dim": "dimless",
@@ -125,25 +145,25 @@
     }],
     "FEM": {
         "BC": {
-            "u": {},
-            "v": {},
-            "w": {},
-            "p": {},
-            "q": {}
+            "u": [],
+            "v": [],
+            "w": [],
+            "p": ["BC1", "BC2"]
         },
         "Loads": {
-            "tx": {},
-            "ty": {},
-            "tz": {},
-            "bx": {},
-            "by": {},
-            "bz": {},
-            "q": {}
+            "tx": [],
+            "ty": [],
+            "tz": [],
+            "bx": [],
+            "by": [],
+            "bz": [],
+            "q": ["BC3"]
         },
         "Fields": [],
         "IC": {
-            "p": {},
-            "s": {}
+            "p": [],
+            "s": [],
+            "phi":[]
         },
         "Steps": {
             "Step1": {

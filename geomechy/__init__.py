@@ -6,3 +6,4 @@ from geomechy.base import *
 from geomechy.utils import *
 from geomechy.io import *
 from geomechy.materials import *
+from geomechy.fem import *

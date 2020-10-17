@@ -61,13 +61,14 @@ class Properties:
 # Cell
 class BaseElement(dict):
 
-    def __init__ (self, numElem, nodes, elems, group, shape, mat, consti):
+    def __init__ (self, Id, nodes, elems, group, shape, mat, consti):
 
-        self.numElem     = numElem
-        self.nodes       = elems[numElem][0]
+        self.Id          = Id
+        self.nodes       = list(np.sort(np.array(elems[Id]["Nodes"] )))
         self.nodesCoords = nodes
-        self.elemType    = getElemetType(np.array([coord for node, coord in self.nodesCoords.items()]))
-        self.Le          = elems[numElem][1]
+        self.coords      = np.array([self.nodesCoords[node] for node in self.nodes])
+        self.elemType    = getElemetType(self.coords)
+        self.Le          = elems[Id]["Le"]
         self.gp          = shape["gp"]
         self.we          = shape["we"]
         self.N           = shape["N"]
@@ -81,7 +82,7 @@ class BaseElement(dict):
         self.history_gps   = pd.DataFrame({"iter":[0]})
         self.current = {"iter":0}
 
-        self.add(self.numElem, self.elemType)
+        self.add(self.Id, self.nodes)
 
     def add(self, Id, item):
         self[Id] = item
