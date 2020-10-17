@@ -20,11 +20,12 @@ class NodeSet(ItemDict):
 
     def readFromDict(self, data):
         nodes_dict    = data["Nodes"]
-        self.dimNodes = eval(nodes_dict["dim"])
         self.numNodes = len(nodes_dict["coords"])
+        self.dimNodes = nodes_dict["dim"]
 
         for node in nodes_dict["coords"]:
-            self.add(node[0], np.array(node[1:])*self.dimNodes)
+            dim = eval(self.dimNodes)
+            self.add(node[0], np.array(node[1:])*dim)
 
     def getNodeCoords(self, nodeId):
         return self.get(nodeId)

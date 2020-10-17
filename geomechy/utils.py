@@ -26,7 +26,18 @@ tera  = 1.e+12
 
 # Cell
 units = {"distance":["meter", "ft", "inch"],
-        "mass":["kg", "gram", "pound", "Ton"]}
+        "mass":["kg", "gram", "pound", "Ton"],
+        "time":["second", "minute", "hour", "day", "year"],
+        "temperature":["Kelvin", "Rankine", "Celsius", "Fahrenheit"],
+        "volume":["litre", "gallon", "stb"],
+        "force":["Newton", "dyne", "lbf"],
+        "press":["kg", "gram", "pound", "Ton"],
+        "energy":["Joules", "btu", "Cal"],
+        "dinamicViscosity":["centiPoise", "Poise"],
+        "kinematicViscosity":["centiStoke", "Stoke"],
+        "absolutePermeability":["milliDarcy","Darcy"],
+        "hydraulicConductivity":["inch_second","mm_second "],
+        "dimensionless":["dimless"]}
 
 # Cell
 meter = 1.                #meters -> meters
@@ -116,7 +127,6 @@ def lanczos(A,xo,m,reorthog=0):
             w = w - alpha[0]*q
         else:
             w = w - alpha[k]*q - beta[k-1]*Q[:,k-1].reshape((-1,1))
-            #print(w)
         if reorthog == 1:
             for i in range(1,k):
                 h = torch.matmul(Q[:,i].reshape((-1,1)).type(torch.float64).T,w)

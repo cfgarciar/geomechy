@@ -5,12 +5,16 @@ __all__ = ['MonoHydroPerm', 'Geomechanic']
 # Cell
 import numpy as np
 from .base import BaseElement
+from .fem import bcField
 from .core import NodeSet, ElementSet, GroupSet, ShapeFunctionsManager, MaterialSet, ConstitutiveManager, ElementManager
 
 # Cell
 class MonoHydroPerm:
     def __init__(self, elements):
         self.elements = elements
+
+    def assembleSystem(self):
+        pass
 
     def assembleH(self):
         H = np.zeros((self.elements.numNodes,self.elements.numNodes))
@@ -19,6 +23,12 @@ class MonoHydroPerm:
             Le = self.elements[e+1].Le
             H = H + np.matmul(Le.T.todense(),np.matmul(He,Le.todense()))
         return H
+
+    def getFem(self,data):
+        bc = bcField()
+        bc.readFromDict(data)
+        p, fext = bc.getVectors()
+        return p, fext
 
 
     def getHeMatrix(self, elem):
